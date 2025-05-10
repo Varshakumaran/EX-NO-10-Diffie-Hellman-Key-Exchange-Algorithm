@@ -20,10 +20,66 @@ To Implement Diffie Hellman Key Exchange Algorithm
 
 ## Program:
 
+```
+#include <stdio.h>
+#include <math.h>
 
+// Function to perform modular exponentiation
+long long power(long long base, long long exponent, long long mod) {
+    long long result = 1;
+    base = base % mod;
+
+    while (exponent > 0) {
+        if (exponent % 2 == 1)  // If exponent is odd
+            result = (result * base) % mod;
+        exponent = exponent >> 1;  // Divide by 2
+        base = (base * base) % mod;
+    }
+    return result;
+}
+
+int main() {
+    long long p, g, privateA, privateB, publicA, publicB, secretA, secretB;
+
+    printf("Enter a prime number (p): ");
+    scanf("%lld", &p);
+
+    printf("Enter a primitive root of p (g): ");
+    scanf("%lld", &g);
+
+    printf("Enter private key for User A: ");
+    scanf("%lld", &privateA);
+
+    printf("Enter private key for User B: ");
+    scanf("%lld", &privateB);
+
+    // Generate public keys
+    publicA = power(g, privateA, p);
+    publicB = power(g, privateB, p);
+
+    printf("\nPublic key of A: %lld", publicA);
+    printf("\nPublic key of B: %lld", publicB);
+
+    // Generate shared secret keys
+    secretA = power(publicB, privateA, p); // A computes secret
+    secretB = power(publicA, privateB, p); // B computes secret
+
+    printf("\n\nShared Secret Key computed by A: %lld", secretA);
+    printf("\nShared Secret Key computed by B: %lld\n", secretB);
+
+    if (secretA == secretB) {
+        printf("\n✅ Key exchange successful. Both users share the same secret key.\n");
+    } else {
+        printf("\n❌ Key mismatch. Something went wrong.\n");
+    }
+
+    return 0;
+}
+```
 
 ## Output:
 
+![image](https://github.com/user-attachments/assets/e9a459fe-cff0-4248-bc0c-b90edbb43881)
 
 
 ## Result:
